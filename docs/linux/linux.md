@@ -3,7 +3,7 @@ layout: default
 title: LINUX
 nav_order: 2
 has_children: true
-permalink: /docs/1.linux
+permalink: /docs/linux
 ---
 
 # Test
