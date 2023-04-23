@@ -1,7 +1,7 @@
 ---
 layout: default
-title: LINUX
-parent: Menu3
+title: test1
+parent: LINUX
 nav_order: 1
 ---
 
