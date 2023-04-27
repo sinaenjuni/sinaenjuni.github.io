@@ -5,6 +5,11 @@ nav_order: 3
 has_children: true
 permalink: /docs/opencv
 ---
+# OpenCV
+{: .no_toc }
+
+
+{:toc}
 
 # Opencv 주요 클래스 정리
 
