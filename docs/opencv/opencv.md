@@ -422,9 +422,10 @@ void resizeWindow(const String& winname, int width, int height);
 ```
 
 ### waitKey (키 입력 대기)
-키 입력을 대기하는 함수로 프로그램이 종료되어 창이 닫히는 것을 방지한다. 인자로 정수 형태로 시간을 입력받는다. 이때 정수는 milliseconds 단위이다. 또한 입력받을 키의 코드`(ESC=27, ENTER=13, TAB=9)`를 반환한다.
+키 입력을 대기하는 함수로 프로그램이 종료되어 창이 닫히는 것을 방지한다. 인자로 정수 형태로 시간을 입력받는다. 이때 정수는 milliseconds 단위이다. 또한 입력받을 키의 코드`(ESC=27, ENTER=13, TAB=9)`를 반환한다. 특수 키를 입력받고 싶다면 `waitKetEx()`함수를 이요하면 된다.
 ```cpp
 int waitKey(int delay = 0);
+int waitKeyEx(int delay = 0);
 ```
 
 
