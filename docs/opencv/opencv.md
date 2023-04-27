@@ -224,6 +224,116 @@ public:
 typedef Scalar_<double> Scalar;
 ```
 
+## 행렬 연산 관련된 함수
+{: .note } `mask` 인자의 경우 0 이 아닌 위치의 데이터 원소들만 연산에 사용한다.
+### sum
+행렬의 합을 구하는 함수이다. Scalar 데이터 타입의 각 채널에 대한 행렬의 합을 반환한다.
+
+```cpp
+Scalar sum(InputArray src);
+```
+
+### mean
+평균을 구하는 함수이다. sum 함수와 마찬가지로 각 채널에 대한 평균을 Scalar 형태의 데이터 타입을 반환한다.
+```cpp
+Scalar mean(InputArray src, InputArray mask = noArray());
+```
+
+
+### minMaxLoc
+```cpp
+void minMaxLoc(InputArray src, CV_OUT double* minVal,
+                CV_OUT double* maxVal = 0, CV_OUT Point* minLoc = 0,
+                CV_OUT Point* maxLoc = 0, InputArray mask = noArray());
+````
+
+### converTo
+
+```cpp
+void GpuMat::convertTo(OutputArray dst, int rtype, double alpha, double beta) const
+{
+    convertTo(dst, rtype, alpha, beta, Stream::Null());
+}
+```
+
+
+### normalize
+
+
+```cpp
+void normalize( InputArray src, InputOutputArray dst, double alpha = 1, double beta = 0,
+                int norm_type = NORM_L2, int dtype = -1, InputArray mask = noArray());
+```
+
+
+```cpp
+enum NormTypes {
+                NORM_INF       = 1,
+                NORM_L1        = 2,
+                NORM_L2        = 4,
+                NORM_L2SQR     = 5,
+                NORM_HAMMING   = 6,
+                NORM_HAMMING2  = 7,
+                NORM_TYPE_MASK = 7, //!< bit-mask which can be used to separate norm type from norm flags
+                NORM_RELATIVE  = 8, //!< flag
+                NORM_MINMAX    = 32 //!< flag
+               };
+```
+
+
+### Exampl code
+
+```cpp
+void ex_ops(){
+    uchar data[] = {1,2,3,4,5,6};
+    Mat mat(2,3, CV_8UC1, data);
+    cout << mat << endl;
+
+    int ret_sum = (int)sum(mat)[0];
+    cout << ret_sum << endl;
+
+    double ret_mean = (double)mean(mat)[0];
+    cout << ret_mean << endl;
+
+    double minval, maxval;
+    Point minloc, maxloc;
+    minMaxLoc(mat, &minval, &maxval, &minloc, &maxloc);
+    cout << format("%f %f (%d, %d) (%d, %d)", 
+    minval, maxval, 
+    minloc.x, minloc.y, 
+    maxloc.x, maxloc.y) << endl;
+    
+    Mat cvt_mat;
+    mat.convertTo(cvt_mat, CV_32FC1, 0.1, -5);
+    cout << cvt_mat << endl;
+    
+    uchar maks_data[] = {1,1,1,1,1,0};
+    Mat mask(2,3, CV_8UC1, maks_data);
+    cout << mask << endl;
+
+    Mat norm_mat;
+    normalize(mat, norm_mat, 0, 1, NORM_MINMAX, CV_32FC1, mask);
+    cout << norm_mat << endl;
+
+}
+```
+
+
+```text
+[  1,   2,   3;
+   4,   5,   6]
+21
+3.5
+1.000000 6.000000 (0, 0) (2, 1)
+[-4.9000001, -4.8000002, -4.6999998;
+ -4.5999999, -4.5, -4.4000001]
+[  1,   1,   1;
+   1,   1,   0]
+[0, 0.25, 0.5;
+ 0.75, 1, 0]
+```
+
+
 
 ## Point_ 클래스
 2차원 점의 좌표를 표현하기 위한 템플릿 클래스이다. 좌표를 나타내는 x와 y 두 멤버 변수를 가지고 있다. 또한 내적을 구하는 `dot()` 함수, double 타입의 내적을 구하는 `ddot()` 함수, 외적을 구하는 `cross()`, 사격형의 겹치는 부분이 있는지를 확인하는 `inside()`로 4개의 멤버 함수로 구성된다.
@@ -406,7 +516,7 @@ enum WindowFlags {
     };
 ```
 
-### (moveWindow) 창의 위치를 이동
+### moveWindow (창의 위치를 이동)
 주어진 이름의 창의 위치를 x, y 좌료로 이동시키는 함수이다.
 ```cpp
 void moveWindow(const String& winname, int x, int y);
@@ -422,7 +532,8 @@ void resizeWindow(const String& winname, int width, int height);
 ```
 
 ### waitKey (키 입력 대기)
-키 입력을 대기하는 함수로 프로그램이 종료되어 창이 닫히는 것을 방지한다. 인자로 정수 형태로 시간을 입력받는다. 이때 정수는 milliseconds 단위이다. 또한 입력받을 키의 코드`(ESC=27, ENTER=13, TAB=9)`를 반환한다. 특수 키를 입력받고 싶다면 `waitKetEx()`함수를 이요하면 된다.
+키 입력을 대기하는 함수로 프로그램이 종료되어 창이 닫히는 것을 방지한다. 인자로 정수 형태로 시간을 입력받는다. 이때 정수는 milliseconds 단위이다. 또한 입력받을 키의 코드`(ESC=27, ENTER=13, TAB=9)`를 반환한다. 특수 키를 입력받고 싶다면 `waitKetEx()`함수를 이용하면 된다. 스페이스바의 경우 공백(' ')과 비교하면 된다.
+
 ```cpp
 int waitKey(int delay = 0);
 int waitKeyEx(int delay = 0);
