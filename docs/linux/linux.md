@@ -6,4 +6,5 @@ has_children: true
 permalink: /docs/linux
 ---
 
-# Test
+# LINUX
+{: .no_toc }
